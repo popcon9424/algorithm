@@ -1,23 +1,28 @@
-# 낚시왕(pypy3)
+# 낚시왕
 
 import sys
 input = sys.stdin.readline
 
 
 def moveshark(shark):
-    x, y, z, speed, direction = shark
+    y, x, z, speed, direction = shark
     global N, M
-    for _ in range(speed):
-        tx, ty = x + dx[direction], y + dy[direction]
-        if 1 > tx or 1 > ty or ty > M or tx > N:
-            if direction % 2:
-                direction -= 1
-            else:
-                direction += 1
-            tx, ty = x + dx[direction], y + dy[direction]
-        x, y = tx, ty
-    sharkset.add((x, y))
-    return (x, y, z, speed, direction)
+    tx, ty = x + speed * dx[direction], y + speed * dy[direction]
+    while not 1 <= tx <= N or not 1 <= ty <= M:
+        if tx < 1:
+            tx = 1 + (1 - tx)
+        elif ty < 1:
+            ty = 1 + (1 - ty)
+        elif tx > N:
+            tx = N - (tx - N)
+        elif ty > M:
+            ty = M - (ty - M)
+        if direction % 2:
+            direction -= 1
+        else:
+            direction += 1
+    sharkset.add((tx, ty))
+    return (ty, tx, z, speed, direction)
 
 
 dx = [-1, 1, 0, 0]
@@ -27,23 +32,22 @@ N, M, C = map(int, input().split())
 sharks = [0] * C
 for idx in range(C):
     x, y, speed, direction, z = map(int, input().split())
-    sharks[idx] = (x, y, z, speed, direction-1)
+    sharks[idx] = (y, x, z, speed, direction-1)
 answer = 0
 for fisher in range(M):
-    target = False
     if sharks == []:
         break
     fisher += 1
+    sharks.sort()
     for shark in sharks:
-        if shark[1] == fisher:
-            if target == False:
-                target = shark
-            else:
-                if shark[0] < target[0]:
-                    target = shark
-    if target:
-        answer += target[2]
-        sharks.remove(target)
+        if shark[0] < fisher:
+            pass
+        elif shark[0] == fisher:
+            answer += shark[2]
+            sharks.remove(shark)
+            break
+        else:
+            break
     sharkset = set()
     for idx in range(len(sharks)):
         sharks[idx] = moveshark(sharks[idx])

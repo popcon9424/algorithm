@@ -20,7 +20,6 @@ def searchLine():
     visited = [ [0] * N for _ in range(N) ]
     visited[0][0] = 1
     while Q:
-        print(Q)
         cost, x, y = Q.pop(0)
         if (x, y) == (N-1, N-1):
             return cost

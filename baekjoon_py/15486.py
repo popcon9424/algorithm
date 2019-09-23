@@ -3,7 +3,6 @@ input = sys.stdin.readline
 
 def counsel():
     global N
-    result = 0
     day = 0
     while day < N:
         if not paylog[day+1]:

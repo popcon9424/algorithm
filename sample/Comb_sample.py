@@ -11,9 +11,7 @@ def combination(all_number, target_number):
             continue
         for num in range(all_number):
             if num not in number_set:
-                temp_set = set()
-                temp_set.add(num)
-                Q.append((cnt+1, number_set | temp_set))
+                Q.append((cnt+1, number_set | {num}))
     return list(comb_set)
 
 
